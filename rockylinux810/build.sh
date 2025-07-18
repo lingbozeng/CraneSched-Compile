@@ -17,6 +17,9 @@ docker run --rm -it \
     cd CraneSched
     git checkout $BRANCH_OR_COMMIT
 
+    # 禁用avx512指令集，程序运行机器只支持avx2指令集，使用 sed 自动替换 CMakeLists.txt 中的 -march=native 为 -mavx2 -march=native
+    sed -i 's/-march=native/-mavx2 -march=native -mno-avx512f -mno-avx512dq -mno-avx512ifma -mno-avx512cd -mno-avx512bw -mno-avx512vl -mno-avx512vbmi -mno-avx512vbmi2 -mno-avx512vnni -mno-avx512bitalg -mno-avx512vpopcntdq/g' CMakeLists.txt
+
     # 启用 gcc-toolset-14
     scl_source enable gcc-toolset-14
 
@@ -43,6 +46,6 @@ docker run --rm -it \
     tar -czvf CraneSched-$DATE.tgz usr/local/bin/cranectld usr/local/bin/craned usr/lib64/security/pam_crane.so
 
     # 删除项目和 usr 目录
-    rm -rf /workspace/CraneSched
+    # rm -rf /workspace/CraneSched
     rm -rf /workspace/usr
 "
