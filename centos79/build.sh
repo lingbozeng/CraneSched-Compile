@@ -37,16 +37,25 @@ docker run --rm -it \
     # 创建相对目录并移动文件到相应位置
     mkdir -p /workspace/usr/local/bin
     mkdir -p /workspace/usr/lib64/security
+    mkdir -p /workspace/usr/lib/systemd/system
+    mkdir -p /workspace/etc/crane
 
-    cp src/CraneCtld/cranectld /workspace/usr/local/bin/
-    cp src/Craned/craned /workspace/usr/local/bin/
-    cp src/Misc/Pam/pam_crane.so /workspace/usr/lib64/security/
+    \cp src/CraneCtld/cranectld /workspace/usr/local/bin/
+    \cp src/Craned/craned /workspace/usr/local/bin/
+    \cp src/Misc/Pam/pam_crane.so /workspace/usr/lib64/security/
+    \cp ../etc/craned.service.in /workspace/usr/lib/systemd/system/craned.service
+    \cp ../etc/cranectld.service.in /workspace/usr/lib/systemd/system/cranectld.service
+    \cp ../etc/config.yaml /workspace/etc/crane
+    \cp ../etc/database.yaml /workspace/etc/crane
+    sed -i 's|@CMAKE_INSTALL_PREFIX@|/usr/local|g' /workspace/usr/lib/systemd/system/cranectld.service
+    sed -i 's|@CMAKE_INSTALL_PREFIX@|/usr/local|g' /workspace/usr/lib/systemd/system/craned.service
 
     # 创建压缩包
     cd /workspace
-    tar -czvf CraneSched-$DATE.tgz usr/local/bin/cranectld usr/local/bin/craned usr/lib64/security/pam_crane.so
+    tar -czvf CraneSched-$DATE.tgz usr/ etc/
 
     # 删除项目和 usr 目录
     rm -rf /workspace/CraneSched
     rm -rf /workspace/usr
+    rm -rf /workspace/etc
 "
