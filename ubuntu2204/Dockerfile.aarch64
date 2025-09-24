@@ -4,6 +4,9 @@ FROM registry.cn-hangzhou.aliyuncs.com/aicpn/linux_arm64_v8_ubuntu:22.04
 # 设置时区
 ENV TZ=UTC
 
+RUN sed -i 's/http:\/\/archive.ubuntu.com/http:\/\/mirrors.aliyun.com/g' /etc/apt/sources.list
+RUN sed -i 's/http:\/\/security.ubuntu.com/http:\/\/mirrors.aliyun.com/g' /etc/apt/sources.list
+
 # 安装基本工具和依赖
 RUN apt update && apt upgrade -y && \
     apt install -y \
@@ -40,16 +43,16 @@ RUN wget https://github.com/libbpf/libbpf/archive/refs/tags/v1.4.6.zip && \
     cd libbpf-1.4.6/src && \
     make && \
     make install && \
-    cd / && rm -rf libbpf-1.4.6
+    cd / && rm -rf libbpf-1.4.6 && rm -rf v1.4.6.zip
 
 # 安装 CMake
-RUN wget https://github.com/Kitware/CMake/releases/download/v3.26.4/cmake-3.26.4-linux-x86_64.sh && \
-    bash cmake-3.26.4-linux-x86_64.sh --prefix=/usr/local --skip-license && \
-    rm cmake-3.26.4-linux-x86_64.sh
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.26.4/cmake-3.26.4-linux-aarch64.sh && \
+    bash cmake-3.26.4-linux-aarch64.sh --prefix=/usr/local --skip-license && \
+    rm -rf cmake-3.26.4-linux-aarch64.sh
 
 # 安装 GCC 14.2
-RUN wget https://ftp.gnu.org/gnu/gcc/gcc-14.2.0/gcc-14.2.0.tar.xz && \
-    tar -Jxvf gcc-14.2.0.tar.xz && \
+RUN wget http://43.135.136.41:3002/crane/gcc-14.2.0.tar.gz && \
+    tar -zxvf gcc-14.2.0.tar.gz && \
     cd gcc-14.2.0/ && \
     ./contrib/download_prerequisites && \
     mkdir build && \
@@ -60,9 +63,9 @@ RUN wget https://ftp.gnu.org/gnu/gcc/gcc-14.2.0/gcc-14.2.0.tar.xz && \
     cd / && rm -rf gcc-14.2.0*
 
 # 使用 wget 下载 Go 安装包并安装
-RUN wget https://golang.org/dl/go1.22.2.linux-amd64.tar.gz -P /root && \
-    tar -C /usr/local -xzf /root/go1.22.2.linux-amd64.tar.gz && \
-    rm -f /root/go1.22.2.linux-amd64.tar.gz
+RUN wget https://golang.org/dl/go1.22.2.linux-arm64.tar.gz -P /root && \
+    tar -C /usr/local -xzf /root/go1.22.2.linux-arm64.tar.gz && \
+    rm -f /root/go1.22.2.linux-arm64.tar.gz
 
 # 设置 Go 环境变量
 ENV GOROOT=/usr/local/go
@@ -72,6 +75,10 @@ ENV PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 # 设置 Go 环境变量和代理
 RUN go env -w GOPROXY=https://goproxy.cn,direct
 RUN go env -w GO111MODULE=on
+
+RUN curl -L https://github.com/protocolbuffers/protobuf/releases/download/v30.2/protoc-30.2-linux-aarch_64.zip -o /tmp/protoc.zip && \
+    unzip /tmp/protoc.zip -d /usr/local && \
+    rm -f /tmp/protoc.zip /usr/local/readme.txt
 
 # 安装 protobuf 和 gRPC 插件
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest

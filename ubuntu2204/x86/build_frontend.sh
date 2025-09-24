@@ -9,7 +9,7 @@ DATE=$(date +%Y%m%d)
 # 拉取并运行容器
 docker run --rm -it \
     -v $(pwd):/workspace \
-    registry.cn-hangzhou.aliyuncs.com/aicpn/rockylinux-compiler:8.10-amd64 bash -c "
+    registry.cn-hangzhou.aliyuncs.com/aicpn/ubuntu-compiler:22.04-amd64 bash -c "
     
     # 克隆项目并切换到指定分支
     cd /workspace

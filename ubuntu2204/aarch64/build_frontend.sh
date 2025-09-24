@@ -9,10 +9,8 @@ DATE=$(date +%Y%m%d)
 # 拉取并运行容器
 docker run --rm -it \
     -v $(pwd):/workspace \
-     -e GOROOT='/usr/local/go' \
-     -e GOPATH='/usr/local/gopath' \
-    registry.cn-shanghai.aliyuncs.com/pkuscow/ubuntu2204_arrch64:crane bash -c "
-    export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin 
+    registry.cn-hangzhou.aliyuncs.com/aicpn/ubuntu-compiler:22.04-aarch64 bash -c "
+
     # 克隆项目并切换到指定分支
     cd /workspace
     git clone https://github.com/PKUHPC/CraneSched-FrontEnd.git
