@@ -10,7 +10,8 @@ DATE=$(date +%Y%m%d)
 docker run --rm -it \
     -v $(pwd):/workspace \
     registry.cn-hangzhou.aliyuncs.com/aicpn/rockylinux-compiler:8.10-amd64 bash -c "
-    
+
+    dnf install -y shadow-utils-subid-devel
     # 克隆项目并切换到指定分支
     cd /workspace
     git clone https://github.com/PKUHPC/CraneSched.git
@@ -40,7 +41,8 @@ docker run --rm -it \
     mkdir -p /workspace/etc/crane
 
     \cp src/CraneCtld/cranectld /workspace/usr/local/bin/
-    \cp src/Craned/craned /workspace/usr/local/bin/
+    \cp src/Craned/Core/craned /workspace/usr/local/bin/
+    \cp src/Craned/Supervisor/csupervisor /workspace/usr/local/bin/
     \cp src/Misc/Pam/pam_crane.so /workspace/usr/lib64/security/
     \cp ../etc/craned.service.in /workspace/usr/lib/systemd/system/craned.service
     \cp ../etc/cranectld.service.in /workspace/usr/lib/systemd/system/cranectld.service
