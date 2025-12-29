@@ -27,8 +27,8 @@ docker run --rm -it \
 
     \cp -r build/bin /workspace/usr/local/
     \cp -r build/plugin /workspace/usr/lib64/cranesched
-    \cp etc/cfored.service /workspace/usr/lib/systemd/system
-    \cp etc/cplugind.service /workspace/usr/lib/systemd/system
+    \cp build/etc/cfored.service /workspace/usr/lib/systemd/system
+    \cp build/etc/cplugind.service /workspace/usr/lib/systemd/system
     \cp plugin/energy/energy.yaml /workspace/etc/crane
     \cp plugin/event/event.yaml /workspace/etc/crane
     \cp plugin/mail/mail.yaml /workspace/etc/crane
