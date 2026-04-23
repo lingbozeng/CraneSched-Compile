@@ -32,17 +32,18 @@ docker run --rm -it \
     cmake -G Ninja -DCMAKE_C_COMPILER=/opt/rh/gcc-toolset-14/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/gcc-toolset-14/root/usr/bin/g++ ..
 
     # 执行编译
-    cmake --build . --target cranectld craned pam_crane
+    cmake --build . --target cranectld craned pam_crane csupervisor
 
     # 创建相对目录并移动文件到相应位置
     mkdir -p /workspace/usr/local/bin
     mkdir -p /workspace/usr/lib64/security
     mkdir -p /workspace/usr/lib/systemd/system
+    mkdir -p /workspace/usr/libexec
     mkdir -p /workspace/etc/crane
 
     \cp src/CraneCtld/cranectld /workspace/usr/local/bin/
     \cp src/Craned/Core/craned /workspace/usr/local/bin/
-    \cp src/Craned/Supervisor/csupervisor /workspace/usr/local/bin/
+    \cp src/Craned/Supervisor/csupervisor /workspace/usr/libexec/
     \cp src/Misc/Pam/pam_crane.so /workspace/usr/lib64/security/
     \cp ../etc/craned.service.in /workspace/usr/lib/systemd/system/craned.service
     \cp ../etc/cranectld.service.in /workspace/usr/lib/systemd/system/cranectld.service
