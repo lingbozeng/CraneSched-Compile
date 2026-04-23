@@ -18,15 +18,18 @@ docker run --rm -it \
     git checkout $BRANCH_OR_COMMIT
 
     make all
+    make tool
 
     # 创建相对目录并移动文件到相应位置
     mkdir -p /workspace/usr/local
+    mkdir -p /workspace/usr/local/libexec/cni
     mkdir -p /workspace/usr/lib64/cranesched
     mkdir -p /workspace/usr/lib/systemd/system
     mkdir -p /workspace/etc/crane
 
     \cp -r build/bin /workspace/usr/local/
     \cp -r build/plugin /workspace/usr/lib64/cranesched
+    \cp build/tool/* /workspace/usr/local/libexec/cni
     \cp build/etc/cfored.service /workspace/usr/lib/systemd/system
     \cp build/etc/cplugind.service /workspace/usr/lib/systemd/system
     \cp plugin/energy/energy.yaml /workspace/etc/crane
